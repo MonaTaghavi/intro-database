@@ -1,0 +1,102 @@
+SELECT * FROM Orders
+	INNER JOIN Customers
+	ON Orders.CustomerID = Customers.CustomerID
+
+SELECT * FROM Orders
+	INNER JOIN Customers
+	ON Orders.CustomerID = Customers.CustomerID
+	INNER JOIN Employees
+	ON Orders.EmployeeID = Employees.EmployeeID
+
+SELECT * FROM Orders
+	INNER JOIN Customers
+	ON Orders.CustomerID = Customers.CustomerID
+    WHERE Country = "Brazil"
+
+EXCERCISE:
+Get the following attributes from Orders where Shipper Name is "United Package" and the customer country is "Germany"
+OrderID, OrderDate, ShipperName, CustomerName, Phone, Country
+
+SELECT O.OrderID, O.OrderDate, S.ShipperName, C.CustomerName, S.Phone, C.Country
+FROM Orders O
+INNER JOIN Customers C
+ON O.CustomerID = C.CustomerID
+INNER JOIN Shippers S
+ON S.ShipperID = O.ShipperID
+WHERE S.ShipperName = "United Package" AND C.Country = "Germany"
+
+EXCERCISE:
+Get the average order price for each country of customers.
+Fields: Country, AveragePrice, TotalOrders
+
+SELECT Avg(P.Price*OD.Quantity) AS AveragePrice, C.Country, Count(*) AS TotalOrders
+FROM Orders O
+INNER JOIN Customers C
+ON O.CustomerID = C.CustomerID
+INNER JOIN OrderDetails OD
+ON O.OrderID = OD.OrderID
+INNER JOIN Products P
+ON P.ProductID = OD.ProductID
+GROUP BY C.Country
+ORDER BY AveragePrice DESC
+
+EXCERCISE:
+Get the average order price for each Category.
+
+
+SELECT AVG(P.Price*OD.Quantity) AS AveragePrice, C.CategoryName
+FROM Orders O
+INNER JOIN Order_Details OD
+ON O.OrderID = OD.OrderID
+INNER JOIN Products P
+ON P.ProductID = OD.ProductID
+INNER JOIN Categories C
+ON C.CategoryID = P.CategoryID
+GROUP BY C.CategoryName
+
+--Home Exercise:Get the whole order amount in $ for each category.
+SELECT 		c.categoryname,
+		SUM(od.Quantity * p.Price) AS Amount
+	FROM orders O
+	inner join order_details od on o.OrderID = od.OrderID
+	inner join products p on od.ProductID = p.ProductID
+	inner join categories c on p.CategoryID = c.CategoryID
+	group by c.categoryname
+	order by amount desc
+
+--Home Exercise:Which customer paid the most in total?
+SELECT TOP 1 c.CustomerID, c.CustomerName, SUM(od.Quantity * p.Price) AS Amount FROM customers c
+JOIN orders o ON c.CustomerID = o.CustomerID
+JOIN order_details od ON od.OrderID = o.OrderID
+JOIN products p ON p.ProductID = od.ProductID
+GROUP BY c.CustomerID, c.CustomerName
+ORDER BY Amount DESC
+
+--Home Exercise:Which single order is the least expensive one?
+SELECT TOP 1 O.OrderID, SUM(od.Quantity * p.Price) AS Amount FROM orders O
+JOIN order_details od ON od.OrderID = o.OrderID
+JOIN products p ON p.ProductID = od.ProductID
+GROUP BY O.OrderID
+ORDER BY Amount ASC
+
+EXCERCISE:
+Get the Countries where the total number of orders is more than 10.
+
+Tip: HAVING Count(*) > 10
+
+SELECT Country, Count(*) as TotalOrder FROM Orders O
+INNER JOIN Customers C
+ON C.CustomerID = O.CustomerID
+Group By Country
+HAVING Count(*) > 10
+
+EXCERCISE:
+Get the Countries where the total quantity is more than 500.
+
+SELECT Country, SUM(Quantity) as TotalQuantity FROM Orders O
+INNER JOIN Customers C
+ON C.CustomerID = O.CustomerID
+INNER JOIN OrderDetails OD
+ON O.OrderID = OD.OrderID
+Group By Country
+HAVING SUM(Quantity) > 500

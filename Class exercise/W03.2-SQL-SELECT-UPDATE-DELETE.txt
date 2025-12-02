@@ -1,0 +1,130 @@
+--SELECT * FROM products
+--Show all the products that are cheaper than 20$
+--Show all the products that are priced between 40$ and 50$
+--Show the productName and its supplier in Category 2
+--Show all the products that are equal or more expensive than 50$ in DESC order of the price.
+--List all the products that have 'Sauce' inside their names.
+--List all the products that have 'Sauce' inside their names.
+SELECT * FROM products
+	WHERE ProductName LIKE '%Sauce%'
+--List all the products that Do not have 'Sauce' inside their names 
+							--in order of CategoryId and price DESC.
+SELECT * FROM products
+	WHERE ProductName NOT LIKE '%Sauce%' ORDER By CategoryID, Price DESC
+--List all the customers whose postal code is similar to Canada, eg H3P 1S5.
+SELECT * FROM customers
+	WHERE PostalCode LIKE '[a-z][0-9][a-z] [0-9][a-z][0-9]'
+--List all the products whose units are not in bottles.
+SELECT * FROM products
+	WHERE Unit NOT LIKE '%bottle%'
+--List all the SUPPLIERS whose country starts with 'U' and 
+					--their ID is less than or equal to 10.
+SELECT * FROM suppliers
+	WHERE Country LIKE 'U%' AND SupplierID<=10
+--List all the SUPPLIERS whose country starts with 'U' and 
+					--has exactly 3 characters.
+SELECT * FROM suppliers
+	WHERE Country LIKE 'U__' 
+
+
+
+SELECT CustomerName, ContactName, City FROM customers
+	WHERE city='London'
+
+Select * 
+from products
+where productname <> 'chang' AND price <= 10
+
+
+Select * 
+from products
+where productname != 'chang' AND price <= 10
+
+
+Select * 
+from products
+where productname LIKE '%hot%'
+
+Select * 
+from products
+where productname NOT LIKE '%Sauce%'
+
+Select * 
+from products
+where productname NOT LIKE '%Sauce%'
+order by CategoryID, ProductName
+
+Select * 
+from products
+where productname NOT LIKE '%Sauce%'
+order by CategoryID, Price DESC
+
+Select * 
+from products
+where (productname LIKE '%cof%' OR ProductName LIKE '%v%') AND Price<20
+
+
+SELECT * FROM Users;
+
+SELECT TOP 5 * FROM Users;
+
+
+SELECT * FROM Users
+	WHERE Age IS NULL;
+
+** WHERE CONDITIONS: **
+
+>
+<
+=
+<=
+>=
+<> !=
+age BETWEEN 2 AND 20
+age >= 2 AND age <= 20
+LIKE			WHERE username LIKE '%dig%'
+IN
+NOT LIKE
+NOT IN
+
+AND
+OR
+NOT
+
+SELECT * FROM Customers
+	WHERE City = 'Paris' OR city = 'London';
+
+SELECT * FROM Customers
+	WHERE City IN ('Paris','London');
+
+SELECT * FROM Products
+	WHERE Price IN (4,18,22,25);
+
+SELECT * FROM users
+	WHERE PostalCode LIKE 'H3H%';
+
+
+
+DELETE FROM users;
+
+DELETE FROM users
+	WHERE username = 'dige';
+
+DELETE FROM users
+	WHERE Age * 2 > 50;
+
+DELETE FROM users
+	WHERE Age * Height > 50;
+
+
+--This updates all records (no condition)
+UPDATE users SET age = 20;
+
+UPDATE users SET age = 20
+	WHERE username = 'dige';
+
+UPDATE users SET age = age + 1
+	WHERE username = 'dige';
+//Delete orders that were placed after 1997-02-11
+//Add 1 dollor to products that are cheaper than 20
+//Double the quantity of products that their productID is 2.

@@ -1,0 +1,79 @@
+CREATE TABLE Users1 (
+	FirstName nvarchar(50) NOT NULL,
+	LastName nvarchar(50) NOT NULL,
+	Age tinyint NOT NULL,
+);
+
+INSERT INTO Users1 (FirstName, LastName, Age) VALUES ('Ali', 'Hage', 20);
+INSERT INTO Users1 (FirstName, LastName, Age) VALUES ('Ali1', 'Hage1', 22);
+INSERT INTO Users1 (FirstName, LastName, Age) VALUES ('Ali2', 'Hage3', 25);
+
+ASSIGNMENT:
+****************************
+Change the field names of USERS1 as below:
+
+FirstName -> First_Name
+LastName -> Last_Name
+****************************
+--ANSWER 1:
+
+CREATE TABLE Users2 (
+	First_Name nvarchar(50) NOT NULL,
+	Last_Name nvarchar(50) NOT NULL,
+	Age tinyint NOT NULL,
+);
+
+INSERT INTO Users2 (Fist_Name, Last_Name, Age)
+	SELECT FirstName, LastName, Age
+		FROM Users1;
+
+DROP TABLE Users1;
+
+CREATE TABLE Users1 (
+	First_Name nvarchar(50) NOT NULL,
+	Last_Name nvarchar(50) NOT NULL,
+	Age tinyint NOT NULL,
+);
+
+INSERT INTO Users1 (Fist_Name, Last_Name, Age)
+	SELECT FirstName, LastName, Age
+		FROM Users2;
+
+DROP TABLE Users2;
+
+--ANSWER 2 (ORACLE):
+ALTER TABLE Users
+	RENAME COLUMN FirstName TO First_Name;
+
+ALTER TABLE Users
+	RENAME COLUMN LastName TO Last_Name;
+
+--ANSWER 3 (SQL SERVER - Stored Procedure):
+EXEC sp_rename "DBName.Users1.FirstName", "First_Name", "COLUMN";
+EXEC sp_rename "DBName.Users1.LastName", "Last_Name", "COLUMN";
+
+
+SELECT * INTO Users2 FROM Users1
+	WHERE 1 = 2;
+
+SELECT * FROM Users
+	WHERE Username = 'Ali'
+		AND Password = 'Ali1';
+
+
+PRACTICE:
+
+UPDATE Users SET LastName = 'Hage'
+	WHERE FirstName = 'Ali';
+
+DELETE FROM Users
+	WHERE FirstName = 'Ali' AND LastName = 'Hage';
+
+
+
+SELECT DISTINCT Age FROM Users1;
+
+
+
+
+

@@ -1,0 +1,97 @@
+Alter Table Customer
+	Alter Column City nvarchar(25) NULL;
+
+Users
+***********************
+FirstName	Gender
+***********************
+Ali	 	1
+Kaveh		1
+Jennifer	0
+
+Gender: 0 - Female
+	1 - Male
+
+Genders
+***********************
+ID	Gender
+***********************
+0	Female
+1	Male
+
+SELECT FirstName, Genders.Gender FROM Users
+INNER JOIN Genders
+ON Users.Gender = Genders.ID
+
+SELECT FirstName,
+	CASE
+	WHEN Gender = 1 THEN "Male"
+	WHEN Gender = 0 THEN "Female"
+	ELSE "Unknown"
+	END AS GenderName
+FROM Users
+
+SELECT *,
+	CASE
+	WHEN Country = 'CA' THEN "Canada"
+	WHEN Country = 'US' THEN "USA"
+	ELSE "Others"
+	End
+FROM Users
+
+
+SELECT * FROM Users
+ORDER BY (CASE
+	WHEN CITY IS NULL THEN COUNTRY
+	ELSE CITY
+	END)
+
+---------------------------------------------------
+Show the country of customers, if it is germany, write GE
+if it is Mexico, write ME
+otherwise, write others.
+
+SELECT *,
+CASE
+	WHEN Country = 'Germany' THEN 'GE'
+	WHEN Country = 'Mexico' THEN 'Me'
+	ELSE 'Others'
+	END
+	FROM customers*
+
+The produceris going to apply a discoount on prices of the products.
+If the price is less than 10, it will be 1.
+between 10 and 20, 5% discount  (price*0.95)
+between 20 and 30, 10% discount
+more than 30, 20%.
+write the query to present discounted prices instead of the actual ones.
+
+https://sqlzoo.net/wiki/Using_Null (Q9 and 10)
+
+SELECT teacher.name,
+CASE WHEN dept.id = 1 THEN 'Sci'
+     WHEN dept.id = 2 THEN 'Sci'
+     ELSE 'Art' END
+FROM teacher LEFT JOIN dept ON (teacher.dept=dept.id)
+
+SELECT teacher.name,
+CASE
+WHEN dept.id = 1 THEN 'Sci'
+WHEN dept.id = 2 THEN 'Sci'
+WHEN dept.id = 3 THEN 'Art'
+ELSE 'None' END
+FROM teacher LEFT JOIN dept ON (dept.id=teacher.dept)
+
+https://sqlzoo.net/wiki/The_JOIN_operation
+Q13
+SELECT mdate,
+       team1,
+       SUM(CASE WHEN teamid = team1 THEN 1 ELSE 0 END) AS score1,
+       team2,
+       SUM(CASE WHEN teamid = team2 THEN 1 ELSE 0 END) AS score2 FROM
+    game LEFT JOIN goal ON (id = matchid)
+    GROUP BY mdate,team1,team2
+    ORDER BY mdate, matchid, team1, team2
+
+
+

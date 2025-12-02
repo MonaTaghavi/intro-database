@@ -1,0 +1,65 @@
+USE database_name;
+
+CREATE TABLE users (
+	ID identity(int,1,1) NOT NULL PRIMARY KEY,
+	Username nvarchar(50),
+	[First Name] nvarchar(50) NOT NULL,
+	LastName nvarchar(50) NOT NULL,
+	Age tinyint,
+);
+
+CREATE TABLE users (
+	Username nvarchar(50) NOT NULL,
+	FirstName nvarchar(50) NOT NULL,
+	LastName nvarchar(50) NOT NULL,
+	Age tinyint,
+	CONSTRAINT PK_Users PRIMARY KEY (FirstName,LastName)
+);
+
+CREATE TABLE users (
+	Username nvarchar(50) NOT NULL PRIMARY KEY,
+	FirstName nvarchar(50) NOT NULL,
+	LastName nvarchar(50) NOT NULL,
+	Age tinyint,
+	CONSTRAINT UNI_Users UNIQUE (FirstName,LastName)
+);
+
+DROP TABLE users;
+
+ALTER TABLE users
+	ADD Phone nvarchar(15);
+
+ALTER TABLE users
+	DROP COLUMN LastName;
+
+ALTER TABLE users
+	DROP CONSTRAINT UNI_Users;
+
+ALTER TABLE users
+	ADD CONSTRAINT UNI_Users UNIQUE (FirstName, LastName);
+
+ALTER TABLE users
+	ALTER COLUMN Age int;
+
+
+INSERT INTO users (LastName, Username, FirstName)
+	VALUES ('Dig', 'Bick', 'Hage');
+
+INSERT INTO users VALUES ('Dig', 'Bick', 'Hage');
+
+
+
+String FirstName = "Dig";
+String LastName = "Hage";
+
+String SQLQuery = "INSERT INTO users ('FirstName','LastName') VALUE ('" + FirstName + "', '" + LastName + "');"
+
+sqlObject.Execute(SQLQuery);
+
+
+
+
+
+
+
+

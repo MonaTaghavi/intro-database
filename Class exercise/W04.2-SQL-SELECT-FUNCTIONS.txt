@@ -1,0 +1,158 @@
+--MIN()          Select * from customers
+--SELECT MIN(Price) FROM products
+/*SELECT TOP 1 Price FROM products
+		ORDER BY Price*/
+
+--MAX()
+/*SELECT MAX(Price) from products
+SELECT TOp 1 Price from products
+     ORDER BY Price DESC */
+
+--SUM()
+--SELECT SUM(Quantity) FROM order_details
+
+--COUNT()
+--SELECT COUNT(CustomerName) AS CustomerCount FROM customers
+
+--Show the number of the customers from each country
+/*SELECT Country, COUNT(*) AS Total_customers  FROM customers
+			GROUP BY Country
+			ORDER BY Total_customers ASC */
+
+
+SELECT DISTINCT Country FROM Users;
+
+///The GROUP BY statement groups rows that have the same values into summary rows, like "find the number of customers in each country".
+
+///The following SQL statement lists the number of customers in each country:
+SELECT Country, Count(*) AS Total FROM Users
+	GROUP BY Country
+	ORDER BY Total DESC;
+///The following SQL statement lists the number of customers in each country, sorted high to low:
+SELECT COUNT(CustomerID), Country
+FROM Customers
+GROUP BY Country
+ORDER BY COUNT(CustomerID) DESC;
+
+///The HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions.
+
+--Find the number of customers from each country
+SELECT Country, COUNT(*) AS Total FROM customers
+	GROUP BY Country
+	ORDER BY Total DESC
+
+--Show the countries with more than 2 customers.
+SELECT Country, COUNT(*) AS TotalCUSTOMERS FROM customers
+	GROUP BY Country
+	HAVING COUNT(*)>2
+	ORDER BY TotalCUSTOMERS DESC
+
+
+
+--Find the average price of the prodcuts in each category ID
+SELECT ProductID, AVG(Price) As AVGPrices FROM products
+	GROUP BY ProductID
+/*Find the average price of the prodcuts in each category ID 
+where the average is higher than 10*/
+SELECT ProductID, AVG(Price) As AVGPrices FROM products
+	GROUP BY ProductID
+	HAVING AVG(Price)>10
+--Find the orderIds that contain less than 20 prodcuct quantities in total
+SELECT OrderID, SUM(Quantity) AS SUMQuantity FROM order_details
+	GROUP BY OrderID
+	HAVING SUM(Quantity) < 20
+	ORDER BY SUMQuantity
+--List all the shipperids who shipped more than 10 orders.
+
+--List min and max prices of each category less than 10 and more than 50.
+select CategoryID, Max(Price) As MAXPrice, Min(Price) As MinPrices FROM products
+	GROUP BY CategoryID
+		HAVING Min(Price) <10 AND Max(Price) >20
+
+------------------
+Country | Total
+------------------ 
+CA	| 5
+US	| 6
+EU	| 7
+
+Min Total: 5
+Max Total: 7
+
+///The following SQL statement lists the employees that have registered more than 10 orders:
+SELECT Employees.LastName, COUNT(Orders.OrderID) AS NumberOfOrders
+FROM (Orders
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID)
+GROUP BY LastName
+HAVING COUNT(Orders.OrderID) > 10;
+
+///The following SQL statement lists if the employees "Davolio" or "Fuller" have registered more than 25 orders:
+SELECT Employees.LastName, COUNT(Orders.OrderID) AS NumberOfOrders
+FROM Orders
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+WHERE LastName = 'Davolio' OR LastName = 'Fuller'
+GROUP BY LastName
+HAVING COUNT(Orders.OrderID) > 25;
+
+
+SELECT Min(Total) AS MinTotal, Max(Total) AS MaxTotal FROM
+	(SELECT Country, Count(*) AS Total FROM Users
+		GROUP BY Country
+		ORDER BY Total DESC) AS Table1;
+------------------
+MinTotal| MaxTotal
+------------------ 
+5	| 7
+
+EXERCISE 2:
+Show the country with the minimum number of users.
+
+SELECT Country, Count(*) AS Total FROM Users
+	GROUP BY Country
+	HAVING Count(*) = (SELECT Min(Total) AS MinTotal FROM
+	(SELECT Country, Count(*) AS Total FROM Users
+		GROUP BY Country) AS Table1);
+
+------------------
+Country | Total
+------------------
+CA	| 1
+
+
+EXCERCISE 3:
+
+------------------
+Country | Total
+------------------
+CA	| 1
+US	| 7
+
+SELECT count(*) as number_of_customers,
+		country
+	FROM customers
+	GROUP BY country
+	HAVING count(*) = (SELECT min(number_of_customers)
+						FROM
+						(SELECT count(*) as number_of_customers,
+								country
+							FROM customers
+							GROUP BY country) x)
+		OR count(*) = (SELECT max(number_of_customers)
+						FROM
+						(SELECT count(*) as number_of_customers,
+								country
+							FROM customers
+							GROUP BY country) x)
+
+SELECT Country, Count(*) AS Total FROM Users
+	GROUP BY Country
+	HAVING Count(*) = (SELECT Min(Total) AS MinTotal FROM
+			(SELECT Country, Count(*) AS Total FROM Users
+				GROUP BY Country) AS Table1)
+		OR
+		Count(*) = (SELECT Max(Total) AS MaxTotal FROM
+			(SELECT Country, Count(*) AS Total FROM Users
+				GROUP BY Country) AS Table2);
+
+FUNCTIONS:
+Min(), Max(), AVG(), Count(), Sum(), Ceiling(), Floor(), Sign(), SQRT(), Abs()

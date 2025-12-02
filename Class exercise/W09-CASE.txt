@@ -1,0 +1,78 @@
+-- Price < 10		=> Price (No Discount)
+-- 10 < Price < 20	=> 5% Discount
+-- 20 < Price < 50  => 10% Discount
+-- Price > 50		=> 20% Discount
+
+	SELECT *, 
+		(Price) AS Discount
+		FROM products
+	WHERE Price < 10
+UNION
+	SELECT *, 
+		(Price - (Price * 0.05)) AS Discount
+		FROM products
+	WHERE Price BETWEEN 10 AND 20
+UNION
+	SELECT *, 
+		(Price - (Price * 0.10)) AS Discount
+		FROM products
+	WHERE Price BETWEEN 20 AND 50
+UNION
+	SELECT *, 
+		(Price - (Price * 0.20)) AS Discount
+		FROM products
+	WHERE Price > 50
+
+
+
+SELECT SUM(Price) AS TotalPrice, SUM(DiscountedPrice) AS TotalDiscountedPrice, SUM(Discount) AS TotalDiscount FROM (
+
+SELECT *,
+    CASE
+	WHEN Price < 10 THEN Price
+    	WHEN Price BETWEEN 10 AND 20 THEN (Price - Price * 0.05)
+    	WHEN Price BETWEEN 20 AND 50 THEN (Price - Price * 0.10)
+    	ELSE (Price - Price * 0.20)
+    END AS DiscountedPrice,
+    
+    CASE
+	WHEN Price < 10 THEN Price
+   	WHEN Price BETWEEN 10 AND 20 THEN (Price * 0.05)
+    	WHEN Price BETWEEN 20 AND 50 THEN (Price * 0.10)
+    	ELSE (Price * 0.20)
+    END AS Discount
+    FROM [Products])
+
+
+
+SELECT
+	SUM(Price) AS TotalPrice,
+	SUM(Discount) AS TotalDiscount,
+	SUM(Price - Discount) AS DiscountedPrice
+	FROM
+		(SELECT *,
+			CASE
+				WHEN Price < 10			THEN 0
+				WHEN Price BETWEEN 10 AND 20	THEN Price * 0.05
+				WHEN Price BETWEEN 20 AND 50	THEN Price * 0.10
+				ELSE Price * 0.20
+			END AS Discount
+		FROM products) products_with_discount
+
+
+SELECT *,
+	CASE
+		WHEN Price <= 10		THEN 'Very cheap'
+		WHEN Price BETWEEN 10 AND 20	THEN 'Cheap'
+		WHEN Price BETWEEN 20 AND 50	THEN 'Expensive'
+		ELSE 'Very expensive'
+	END AS PriceTag
+	FROM products
+
+SELECT
+	CASE
+	    WHEN Gender = 0 THEN 'Male'
+	    WHEN Gender = 1 THEN 'Female'
+	END AS GenderName
+FROM employees
+	

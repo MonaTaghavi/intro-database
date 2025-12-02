@@ -1,0 +1,56 @@
+https://joins.spathon.com/
+
+SELECT * FROM products
+INNER JOIN categories ON categories.CategoryID = products.CategoryID
+WHERE categories.CategoryName = 'Seafood'
+
+SELECT * FROM products
+INNER JOIN categories ON products.CategoryID = categories.CategoryID
+INNER JOIN suppliers ON products.SupplierID = suppliers.SupplierID
+WHERE suppliers.Country = 'Japan'
+
+SELECT products.*, categories.*, suppliers.* FROM categories
+INNER JOIN products ON products.CategoryID = categories.CategoryID
+INNER JOIN suppliers ON products.SupplierID = suppliers.SupplierID
+
+SELECT * FROM employees
+INNER JOIN orders ON orders.EmployeeID = employees.EmployeeID
+
+SELECT * FROM employees
+LEFT JOIN orders ON orders.EmployeeID = employees.EmployeeID
+WHERE orders.OrderID is Null
+
+SELECT * FROM employees
+RIGHT JOIN orders ON orders.EmployeeID = employees.EmployeeID
+WHERE orders.OrderID is Null
+
+-- Listing all employees with zero orders
+SELECT * FROM employees
+FULL OUTER JOIN orders ON orders.EmployeeID = employees.EmployeeID
+WHERE orders.OrderID is Null
+
+-- Listing all customers with their orders
+SELECT Customers.CustomerName, Orders.OrderID
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+ORDER BY Customers.CustomerName;
+
+SELECT * FROM customers
+WHERE CustomerID IN (
+	SELECT CustomerID FROM customers
+	EXCEPT
+	SELECT CustomerID FROM orders
+)
+
+SELECT * FROM customers
+WHERE CustomerID NOT IN (
+	SELECT DISTINCT CustomerID FROM orders
+)
+
+-- TOP 10 most paying customers
+SELECT TOP 10 c.CustomerID, c.CustomerName, SUM(od.Quantity * p.Price) AS Amount FROM customers c
+JOIN orders o ON c.CustomerID = o.CustomerID
+JOIN order_details od ON od.OrderID = o.OrderID
+JOIN products p ON p.ProductID = od.ProductID
+GROUP BY c.CustomerID, c.CustomerName
+ORDER BY Amount DESC
